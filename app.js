@@ -17,7 +17,7 @@ const worksheet = workbook.Sheets['Meses'];
 
 app.get('/', (req, res) => {
     const maxCellsToShow = 75; // Cambia esto al número de celdas que deseas mostrar
-  const columnToRead = 'AQE';/* tu columna */
+  const columnToRead = 'AVM';/* tu columna */
   const tableRows = [];
   const palabraEspecial = 'twin';
 
