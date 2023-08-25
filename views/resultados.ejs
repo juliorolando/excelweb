@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Resultados</title>
+  </head>
+  <body>
+    <h1>Resultados de la Búsqueda</h1>
+    <table border="1">
+      <tr>
+        <th>Celda</th>
+        <th>Mensaje</th>
+      </tr>
+      <% for (const row of tableRows) { %>
+        <tr>
+          <td><%= row.habitacionAsign %></td>
+          <td><% if (row.tituloReserva.includes(palabraEspecial)) { %>
+            <strong><%= row.tituloReserva %></strong>
+          <% } else { %>
+            <%= row.tituloReserva %>
+          <% } %></td>
+        </tr>
+      <% } %>
+    </table>
+  </body>
+</html>
