@@ -2,10 +2,20 @@
 <html>
   <head>
     <title>Resultados</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   </head>
   <body>
-    <h1>Resultados de la Búsqueda</h1>
-    <table border="1">
+    <form action="/fecha" method="GET">
+      <label for="calendario">Selecciona una fecha:</label>
+      <input type="text" id="calendario" name="fecha" class="flatpickr">
+      <button type="submit">Enviar</button>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+      flatpickr(".flatpickr");
+    </script>
+    <h1>Reservas</h1>
+  <table border="1">
       <tr>
         <th>Habitación</th>
         <th>Titular de reserva</th>
@@ -20,6 +30,16 @@
           <% } %></td>
         </tr>
       <% } %>
-    </table>
+      </table>
+      <p>La suma de huéspedes es: <%= huespedesFinal %>.</p>
+      <br>
+      <button id="btnImprimir">Imprimir</button>
+    <script>
+      const btnImprimir = document.getElementById('btnImprimir');
+      btnImprimir.addEventListener('click', () => {
+        window.print();
+      });
+    </script>
+
   </body>
 </html>
