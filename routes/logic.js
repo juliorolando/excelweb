@@ -14,53 +14,53 @@ function obtenerTablaRows(worksheet, maxCellsToShow, columnToRead) {
                 habitacionNum = parseInt(match[1]);
                 let numeroDePiso;
 
-                if (habitacionNum >= 3 && habitacionNum <= 5) {
+                if (habitacionNum === 4) {
                     numeroDePiso = 101;
-                } else if (habitacionNum >= 6 && habitacionNum <= 8) {
+                } else if (habitacionNum === 7) {
                     numeroDePiso = 102;
-                } else if (habitacionNum >= 72 && habitacionNum <= 74) {
+                } else if (habitacionNum === 73) {
                     numeroDePiso = "Depto";
-                } else if (habitacionNum >= 9 && habitacionNum <= 11) {
+                } else if (habitacionNum === 10) {
                     numeroDePiso = 111;
-                } else if (habitacionNum >= 12 && habitacionNum <= 14) {
+                } else if (habitacionNum === 13) {
                     numeroDePiso = 112;
-                } else if (habitacionNum >= 15 && habitacionNum <= 17) {
+                } else if (habitacionNum === 16) {
                     numeroDePiso = 113;
-                } else if (habitacionNum >= 18 && habitacionNum <= 20) {
+                } else if (habitacionNum === 19) {
                     numeroDePiso = 114;
-                } else if (habitacionNum >= 21 && habitacionNum <= 23) {
+                } else if (habitacionNum === 22) {
                     numeroDePiso = 115;
-                } else if (habitacionNum >= 24 && habitacionNum <= 26) {
+                } else if (habitacionNum === 25) {
                     numeroDePiso = 116;
-                } else if (habitacionNum >= 27 && habitacionNum <= 29) {
+                } else if (habitacionNum === 28) {
                     numeroDePiso = 117;
-                } else if (habitacionNum >= 30 && habitacionNum <= 32) {
+                } else if (habitacionNum === 31) {
                     numeroDePiso = 118;
-                } else if (habitacionNum >= 33 && habitacionNum <= 35) {
+                } else if (habitacionNum === 34) {
                     numeroDePiso = 119;
-                } else if (habitacionNum >= 36 && habitacionNum <= 38) {
+                } else if (habitacionNum === 37) {
                     numeroDePiso = 120;
-                } else if (habitacionNum >= 39 && habitacionNum <= 41) {
+                } else if (habitacionNum === 40) {
                     numeroDePiso = 201;
-                } else if (habitacionNum >= 42 && habitacionNum <= 44) {
+                } else if (habitacionNum === 43) {
                     numeroDePiso = 202;
-                } else if (habitacionNum >= 45 && habitacionNum <= 47) {
+                } else if (habitacionNum === 46) {
                     numeroDePiso = 203;
-                } else if (habitacionNum >= 48 && habitacionNum <= 50) {
+                } else if (habitacionNum === 49) {
                     numeroDePiso = 204;
-                } else if (habitacionNum >= 51 && habitacionNum <= 53) {
+                } else if (habitacionNum === 52) {
                     numeroDePiso = 205;
-                } else if (habitacionNum >= 54 && habitacionNum <= 56) {
+                } else if (habitacionNum === 55) {
                     numeroDePiso = 206;
-                } else if (habitacionNum >= 57 && habitacionNum <= 59) {
+                } else if (habitacionNum === 58) {
                     numeroDePiso = 207;
-                } else if (habitacionNum >= 60 && habitacionNum <= 62) {
+                } else if (habitacionNum === 61) {
                     numeroDePiso = 208;
-                } else if (habitacionNum >= 63 && habitacionNum <= 65) {
+                } else if (habitacionNum === 64) {
                     numeroDePiso = 301;
-                } else if (habitacionNum >= 66 && habitacionNum <= 68) {
+                } else if (habitacionNum === 67) {
                     numeroDePiso = 302;
-                } else if (habitacionNum >= 69 && habitacionNum <= 71) {
+                } else if (habitacionNum === 70) {
                     numeroDePiso = 303;
                 }
 
