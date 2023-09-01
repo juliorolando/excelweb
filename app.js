@@ -12,101 +12,72 @@ app.set('view engine', 'ejs');
 app.set('views', viewsDir);
 
 // Cargar el archivo Excel
-const workbook = XLSX.readFile('C:/Users/NetCell/Downloads/RESERVAS 2023.xlsx');
+const workbook = XLSX.readFile('C:/Users/NetCell/Downloads/RESERVAS 2023.xlsx', { cellDates: true });
 const worksheet = workbook.Sheets['Meses'];
 
 app.use((req, res, next) => {
-    req.worksheet = worksheet; // Pasar worksheet como propiedad de la solicitud
-    next();
+  req.worksheet = worksheet; // Pasar worksheet como propiedad de la solicitud
+  next();
 });
 
 app.get('/', (req, res) => {
-    const maxCellsToShow = 75; // Cambia esto al número de celdas que deseas mostrar
-    const columnToRead = 'AZC';/* tu columna */
-    const palabraEspecial = 'twin';
-    const tableRows = logic.obtenerTablaRows(req.worksheet, maxCellsToShow, columnToRead);
-    const huespedesFinal = tableRows[tableRows.length - 1].totalHuespedes
-    res.render('resultados', { tableRows, huespedesFinal, palabraEspecial: palabraEspecial.toLowerCase() })
+  const maxCellsToShow = 75; // Cambia esto al número de celdas que deseas mostrar
+  const columnToRead = 'AZC';/* tu columna */
+  const palabraEspecial = 'twin';
+  const tableRows = logic.obtenerTablaRows(req.worksheet, maxCellsToShow, columnToRead);
+  const huespedesFinal = tableRows[tableRows.length - 1].totalHuespedes
+  res.render('resultados', { tableRows, huespedesFinal, palabraEspecial: palabraEspecial.toLowerCase() })
 });
 
-app.get('/fecha', (req, res) => {
-  const workbook = XLSX.readFile('C:/Users/NetCell/Downloads/RESERVAS 2023.xlsx');
-  const sheetName = workbook.SheetNames[0]; // Suponiendo que quieres buscar en la primera hoja
-  const sheet = workbook.Sheets[sheetName];
-  
-  const cellValue = getCellValue(sheet, 45169); // Cambia 'A1' por la dirección de la celda que deseas buscar0
-  console.log("cellvalue" + cellValue)
+/* app.get('/fecha', (req, res) => {
+  const fecha = req.query.fecha;
+  const buscarFecha = new Date(fecha).iso
+  res.send(`Fecha seleccionada: ${fecha}`);
+}); */
 
-  function formatFecha(fecha) {
-    const partes = fecha.split('-'); // Dividir la fecha en partes (año, mes, día)
-    const dia = parseInt(partes[2], 10);
-    const mes = parseInt(partes[1], 10);
-    const anio = partes[0];
-    const mesFormateado = mes < 10 ? `${mes}` : mes.toString(); // Eliminar 0 si el mes es mayor o igual a 10
-    const fechaFormateada = `${dia}/${mesFormateado}/${anio}`;
-    return fechaFormateada;
+app.get('/buscar', (req, res) => {
+
+
+
+ // ESTE CÓDIGO FUNCIONA PERFECTO PARA BUSCAR FECHAS CON EL BUSCADOR. 
+ // ME FALTA IMPLEMETARLO AUN, PERO EL CODIGO ANDA BIENNNNN
+
+
+
+  // const searchString = 45170; // The string to search for
+  const workbook = XLSX.readFile('C:/Users/NetCell/Downloads/RESERVAS 2023.xlsx', { cellDates: true });
+  const sheetName = workbook.SheetNames[0]; // Supposing you want to search in the first sheet
+  const worksheet = workbook.Sheets[sheetName];
+
+  function convertirAISO8601Completo(fecha) {
+    // Dividir la fecha en sus componentes (año, mes, día)
+    const partesFecha = fecha.split('-');
+    // Crear un nuevo objeto Date con las partes de la fecha
+    const fechaISO = new Date(partesFecha[0], partesFecha[1] - 1, partesFecha[2]);
+    // Obtener las partes de la fecha en formato ISO8601
+    const año = fechaISO.getFullYear();
+    const mes = (fechaISO.getMonth() + 1).toString().padStart(2, '0'); // Añadir ceros iniciales si es necesario
+    const día = fechaISO.getDate().toString().padStart(2, '0'); // Añadir ceros iniciales si es necesario
+    // Construir la fecha en formato ISO8601 completo (con horas, minutos, segundos y milisegundos)
+    const fechaCompleta = `${año}-${mes}-${día}T00:00:00.000Z`;
+    return fechaCompleta;
   }
 
-  const fechaInput = req.query.fecha; // Obtener la fecha desde req.query.fecha
-  console.log("fecha input"+fechaInput)
-  const jsDate =  new Date(fechaInput);
-  console.log("jsadate:"+jsDate)
- // const fechaFormateada = formatFecha(jsDate);
-  const fechaExcel = convertToExcelDate(jsDate);
-  
-  console.log(fechaExcel); // Imprimir la fecha formateada
+
+  const fechaOriginal = req.query.fecha;
+  const fechaBuscada = new Date(convertirAISO8601Completo(fechaOriginal))
+
+  // Recorre todas las celdas de la hoja de cálculo
+    for (const cellAddress in worksheet) {
+     if (!worksheet.hasOwnProperty(cellAddress) || cellAddress[0] === '!') continue; // Ignora celdas especiales
+     const cell = worksheet[cellAddress];
+     if (cell.t === 'd' && cell.v.getTime() === fechaBuscada.getTime()) {
+       // Si la celda contiene una fecha y coincide con la fecha buscada
+       console.log(`Fecha encontrada en la celda ${cellAddress}`);
+     }
+   } 
 });
-
-// el numero que me devuelve es el titulo de reserva. cellValue.
-// las fechas en excel se parsean a ese formato de numero.
-
-function getCellValue(sheet, cellAddress) {
-  const cell = sheet[cellAddress];
-  if (cell && cell.v !== undefined) {
-    return cell.v;
-  }
-  return undefined;
-}
-
-function convertToExcelDate(jsDate) {
-  const excelStartDate = new Date('1899-12-30'); // Fecha de inicio de Excel (30 de diciembre de 1899)
-  const timeDiff = jsDate.getTime() - excelStartDate.getTime(); // Diferencia de tiempo en milisegundos
-  const excelDateValue = timeDiff / (86400 * 1000); // Convertir a valor Excel (en días) y sumar 1
-  
-  return excelDateValue;
-}
-
-
-app.get('/procesar', (req, res) => {
-    const fecha = req.query.fecha;
-    res.send(`Fecha seleccionada: ${fecha}`);
-  });
-
-  app.get('/findCell', (req, res) => {
-   // const searchString = 45170; // The string to search for
-    const workbook = XLSX.readFile('C:/Users/NetCell/Downloads/RESERVAS 2023.xlsx');
-    const sheetName = workbook.SheetNames[0]; // Supposing you want to search in the first sheet
-    const worksheet = workbook.Sheets[sheetName];
-  
-    const dateToFind = "44562"; // replace with the date you want to find
-
-    const range = XLSX.utils.decode_range(worksheet['!ref']);
-    for (let row = range.s.r; row <= range.e.r; row++) {
-      for (let col = range.s.c; col <= range.e.c; col++) {
-        const cell = worksheet[XLSX.utils.encode_cell({ c: col, r: row })];
-        if (cell && cell.t === 'n' && new Date(parseInt(cell.v)) === dateToFind) {
-          res.send(`Found date ${dateToFind} at row ${row} and column ${col}`);
-          return;
-        }
-      }
-    }
-  
-    res.send(`Date ${dateToFind} not found in the file.`);
-  
-  });
-
-
 
 app.listen(port, () => {
-    console.log(`Servidor web activo en http://localhost:${port}`);
+  console.log(`Servidor web activo en http://localhost:${port}`);
 });
