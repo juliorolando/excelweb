@@ -1,45 +1,56 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Resultados</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  </head>
-  <body>
-    <form action="/buscar" method="GET">
-      <label for="calendario">Selecciona una fecha:</label>
-      <input type="text" id="calendario" name="fecha" class="flatpickr">
-      <button type="submit">Enviar</button>
-    </form>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script>
-      flatpickr(".flatpickr");
-    </script>
-    <h1>Ingresos de hoy</h1>
-  <table border="1">
-      <tr>
-        <th>Habitación</th>
-        <th>Titular de reserva</th>
-      </tr>
-      <% for (const row of tableRows) { %>
-        <tr>
-          <td><%= row.habitacionAsign %></td>
-          <td><% if (row.tituloReserva.includes(palabraEspecial)) { %>
-            <strong><%= row.tituloReserva %></strong>
-          <% } else { %>
-            <%= row.tituloReserva %>
-          <% } %></td>
-        </tr>
-      <% } %>
-      </table>
-      <p>La suma de huéspedes es: <%= huespedesFinal %>.</p>
-      <br>
-      <button id="btnImprimir">Imprimir</button>
-    <script>
-      const btnImprimir = document.getElementById('btnImprimir');
-      btnImprimir.addEventListener('click', () => {
-        window.print();
-      });
-    </script>
 
-  </body>
+<head>
+  <title>Resultados</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+
+<body>
+  <form action="/buscar" method="GET">
+    <label for="calendario">Selecciona una fecha:</label>
+    <input type="text" id="calendario" name="fecha" class="flatpickr">
+    <button type="submit">Enviar</button>
+  </form>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script>
+    flatpickr(".flatpickr");
+  </script>
+  <h1>Ingresos de hoy</h1>
+  <table border="1">
+    <tr>
+      <th>Habitación</th>
+      <th>Titular de reserva</th>
+    </tr>
+    <% for (const row of tableRows) { %>
+      <tr>
+        <td style="text-align: center;">
+          <strong>
+            <%= row.habitacionAsign %>
+          </strong>
+        </td>
+        <td>
+          <% if (row.tituloReserva.includes(palabraEspecial)) { %>
+            <strong>
+              <%= row.tituloReserva %>
+            </strong>
+            <% } else { %>
+              <%= row.tituloReserva %>
+                <% } %>
+        </td>
+      </tr>
+      <% } %>
+  </table>
+  <p>La suma de huéspedes es: <%= huespedesFinal %>.</p>
+  <br>
+  <button id="btnImprimir">Imprimir</button>
+  <script>
+    const btnImprimir = document.getElementById('btnImprimir');
+    btnImprimir.addEventListener('click', () => {
+      window.print();
+    });
+  </script>
+
+</body>
+
 </html>

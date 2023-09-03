@@ -1,7 +1,7 @@
 const express = require('express');
 const XLSX = require('xlsx');
 const path = require('path');
-const logic = require('./routes/logic');
+const busquedaPorColumna = require('./routes/busquedaPorColumna');
 
 const app = express();
 const port = 3000;
@@ -22,17 +22,14 @@ app.use((req, res, next) => {
 app.get('/', (req, res) => {
   const maxCellsToShow = 75;
   const columnToRead = 'AZC';
-  const palabraEspecial = 'twin';
-  const tableRows = logic.obtenerTablaRows(req.worksheet, maxCellsToShow, columnToRead);
+  const palabraEspecial = 'twin'; // pinto en negrita las reservas que contengan TWIN (y/o agregar las que sean necesarias)
+  const tableRows = busquedaPorColumna.obtenerTablaRows(req.worksheet, maxCellsToShow, columnToRead);
   const huespedesFinal = tableRows[tableRows.length - 1].totalHuespedes
   res.render('resultados', { tableRows, huespedesFinal, palabraEspecial: palabraEspecial.toLowerCase() })
 });
 
 app.get('/buscar', (req, res) => {
-  // PENDIENTE DE RENDERIZAR RESULTADOS EN EL INDEX
-  const workbook = XLSX.readFile('C:/Users/NetCell/Downloads/RESERVAS 2023.xlsx', { cellDates: true });
-  const sheetName = workbook.SheetNames[0];
-  const worksheet = workbook.Sheets[sheetName];
+  // PENDIENTE - SEGÚN FECHA Y CELDA SELECCIONADA, PODER DIFERENCIAR ENTRE LAS SALIDAS Y LAS ENTRADAS.
 
   function convertirAISO8601Completo(fecha) {
     const partesFecha = fecha.split('-');
@@ -54,6 +51,7 @@ app.get('/buscar', (req, res) => {
       console.log(`Fecha encontrada en la celda ${cellAddress}`);
     }
   }
+  
 });
 
 app.listen(port, () => {

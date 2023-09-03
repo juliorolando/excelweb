@@ -1,5 +1,3 @@
-const XLSX = require('xlsx');
-
 function obtenerTablaRows(worksheet, maxCellsToShow, columnToRead) {
     const tableRows = [];
    let totalHuespedes = 0;
@@ -68,10 +66,10 @@ function obtenerTablaRows(worksheet, maxCellsToShow, columnToRead) {
                 let tituloReserva = `${cellValue.toLowerCase()}`;
 
                 let huespedesPorReserva = tituloReserva.match(/x(\d+)/i);
-                let cantidadHuespedes = 1; // Valor predeterminado si no se encuentra la cantidad de huéspedes
+                let cantidadHuespedes = 1;
                 if (huespedesPorReserva) {
                     cantidadHuespedes = parseInt(huespedesPorReserva[1]);
-                    totalHuespedes += cantidadHuespedes; // Sumar la cantidad de huéspedes al total
+                    totalHuespedes += cantidadHuespedes
                 }
 
                 tableRows.push({ habitacionAsign, tituloReserva, totalHuespedes });
