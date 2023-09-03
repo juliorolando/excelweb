@@ -3,6 +3,7 @@ const XLSX = require('xlsx');
 const path = require('path');
 const busquedaPorColumna = require('./routes/busquedaPorColumna');
 const busquedaPorFecha = require('./routes/busquedaPorFecha');
+const columnaDeHoy = require('./routes/columnaFechaActual');
 
 const app = express();
 const port = 3000;
@@ -21,25 +22,13 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-
   const fechaActual = new Date();
-  const year = fechaActual.getFullYear();
-  const month = String(fechaActual.getMonth() + 1).padStart(2, '0'); // +1 porque los meses se cuentan desde 0
-  const day = String(fechaActual.getDate()).padStart(2, '0');
-  const fechaFormateada = `${year}-${month}-${day}`;
-  const fechaISOBuscada = new Date(busquedaPorFecha.convertirAISO8601Completo(fechaFormateada))
-  let valorCelda = [];
-  for (const cellAddress in worksheet) {
-    if (!worksheet.hasOwnProperty(cellAddress) || cellAddress[0] === '!') continue;
-    const cell = worksheet[cellAddress];
-    if (cell.t === 'd' && cell.v.getTime() === fechaISOBuscada.getTime()) {
-      testeo.push(cellAddress);
-    }
-  }
+  const fechaFormateada = busquedaPorFecha.formatearFecha(fechaActual);
+  const fechaISOBuscada = new Date(busquedaPorFecha.convertirAISO8601Completo(fechaFormateada));
+  const columnaHoy = columnaDeHoy.buscarValorCeldaHoy(req.worksheet, fechaISOBuscada) 
   const maxCellsToShow = 75;
-  const data = valorCelda[0].replace(/\d+$/, '');
-  const dataFinal = busquedaPorColumna.obtenerColumnaPosterior(data)
-  const columnToRead = dataFinal.posterior
+  const columna = busquedaPorColumna.obtenerColumnaPosterior(columnaHoy)
+  const columnToRead = columna.posterior
   const palabraEspecial = 'twin'; // pinto en negrita las reservas que contengan TWIN (y/o agregar las que sean necesarias)
   const tableRows = busquedaPorColumna.obtenerTablaRows(req.worksheet, maxCellsToShow, columnToRead);
   const huespedesFinal = tableRows[tableRows.length - 1].totalHuespedes
