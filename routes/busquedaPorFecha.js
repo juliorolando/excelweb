@@ -11,7 +11,7 @@ function convertirAISO8601Completo(fecha) {
 function formatearFecha(fechaActual) {
 
     year = fechaActual.getFullYear();
-    month = String(fechaActual.getMonth() + 1).padStart(2, '0'); // +1 porque los meses se cuentan desde 0
+    month = String(fechaActual.getMonth() + 1).padStart(2, '0');
     day = String(fechaActual.getDate()).padStart(2, '0');
     const fechaFormateada = `${year}-${month}-${day}`;
     return fechaFormateada

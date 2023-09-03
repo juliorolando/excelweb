@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   </head>
   <body>
-    <form action="/fecha" method="GET">
+    <form action="/buscar" method="GET">
       <label for="calendario">Selecciona una fecha:</label>
       <input type="text" id="calendario" name="fecha" class="flatpickr">
       <button type="submit">Enviar</button>
@@ -14,7 +14,7 @@
     <script>
       flatpickr(".flatpickr");
     </script>
-    <h1>Ingresos de hoy</h1>
+    <h1>Resultados de la búsqueda:</h1>
   <table border="1">
       <tr>
         <th>Habitación</th>
