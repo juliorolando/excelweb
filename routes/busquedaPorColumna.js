@@ -1,7 +1,6 @@
 function obtenerTablaRows(worksheet, maxCellsToShow, columnToRead) {
     const tableRows = [];
-   let totalHuespedes = 0;
-
+    let totalHuespedes = 0;
     for (let rowNum = 1; rowNum <= maxCellsToShow; rowNum++) {
         const cellAddress = columnToRead + rowNum;
         const cellValue = worksheet[cellAddress]?.v;
@@ -81,6 +80,45 @@ function obtenerTablaRows(worksheet, maxCellsToShow, columnToRead) {
     return tableRows;
 }
 
+function obtenerColumnaPosterior(columna) {
+/*     // Eliminar cualquier número que aparezca al final de la columna
+    columna = columna.replace(/\d+$/, ''); */
+
+    // Validar que la columna resultante sea válida (por ejemplo, que esté en formato "A", "AA", "AAA", etc.)
+    const columnaRegex = /^[A-Z]+$/;
+    if (!columnaRegex.test(columna)) {
+        throw new Error('Formato de columna no válido');
+    }
+    // Convertir la columna a un número de índice
+    let indice = 0;
+    for (let i = columna.length - 1, j = 0; i >= 0; i--, j++) {
+        const letra = columna[i];
+        const valor = letra.charCodeAt(0) - 'A'.charCodeAt(0) + 1;
+        indice += valor * Math.pow(26, j);
+    }
+    // Calcular la columna posterior
+    const columnaPosterior = obtenerColumnaDesdeIndice(indice + 1);
+
+    return {
+        posterior: columnaPosterior,
+    };
+}
+
+function obtenerColumnaDesdeIndice(indice) {
+    let columna = '';
+    while (indice > 0) {
+        const modulo = (indice - 1) % 26;
+        columna = String.fromCharCode('A'.charCodeAt(0) + modulo) + columna;
+        indice = Math.floor((indice - 1) / 26);
+    }
+    return columna;
+}
+
+/* const resultado = obtenerColumnaPosterior(columnaActual);
+console.log(`Columna posterior a ${columnaActual}: ${resultado.posterior}`); */
+
+
 module.exports = {
-    obtenerTablaRows
+    obtenerTablaRows,
+    obtenerColumnaPosterior
 };
